@@ -17,7 +17,7 @@ public class TiledBackground : MonoBehaviour {
     Vector2 imageScale;
     float lastCameraZoom;
 
-	void Update() {
+	void LateUpdate() {
         // Recalculate if camera zoom chances
         float size = myCam.orthographicSize;
         if (size != lastCameraZoom) {
