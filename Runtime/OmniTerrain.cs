@@ -12,7 +12,8 @@ namespace UnityEngine.Tilemaps {
     public class OmniTerrain : TileBase {
         // Types
         public enum TileDistortion { None, FlipHorizontal, FlipVertical, RotateCW, RotateCCW, Rotate180 }
-        public enum TileID { Standard, TopLeft, TopCenter, TopRight, MiddleLeft, MiddleCenter, MiddleRight, BottomLeft, BottomCenter,
+        public enum TileID {
+            Standard, TopLeft, TopCenter, TopRight, MiddleLeft, MiddleCenter, MiddleRight, BottomLeft, BottomCenter,
             BottomRight, InnerTopLeft, InnerTopRight, InnerBottomLeft, InnerBottomRight, DiagonalLeft, DiagonalRight, SingleLeft,
             SingleCenter, SingleRight, SingleTop, SingleMiddle, SingleBottom, Single, SHTopLeft, SHTopRight, SHMiddleLeft, SHMiddleRight,
             SHBottomLeft, SHBottomRight, SVTopLeft, SVTopCenter, SVTopRight, SVBottomLeft, SVBottomCenter, SVBottomRight, SSTopLeft,
@@ -172,6 +173,7 @@ namespace UnityEngine.Tilemaps {
 
         // Properties
         public TileProperties[] tiles;
+        public Color baseColor;
         public List<TileBase> allowedTiles;
         public Tile.ColliderType colliderType = Tile.ColliderType.Grid;
         public FallbackRespect fallbackRespect = FallbackRespect.Best;
@@ -213,7 +215,8 @@ namespace UnityEngine.Tilemaps {
         public int GetFallback(int id) {
             if (fallbackPriority == FallbackPriority.Custom) {
                 return tiles[id].fallback;
-            } else {
+            }
+            else {
                 return fallbackTable[(int)fallbackPriority][(int)fallbackRespect][id];
             }
         }
@@ -223,7 +226,8 @@ namespace UnityEngine.Tilemaps {
             while (id != 0) {
                 if (tiles[id].sprite == null) {
                     id = GetFallback(id);
-                } else {
+                }
+                else {
                     break;
                 }
                 counter++;
@@ -342,7 +346,7 @@ namespace UnityEngine.Tilemaps {
         bool HasTileAt(ITilemap tileMap, Vector3Int position) {
             // Check whether the tile is ours
             TileBase tile = tileMap.GetTile(position);
-            
+
             // Ignore null tiles
             if (tile == null) return false;
 
@@ -356,7 +360,7 @@ namespace UnityEngine.Tilemaps {
 
             return tile == this;
         }
-        
+
         void UpdateTile(Vector3Int location, ITilemap tileMap, ref TileData tileData, int around = 0) {
             if (!HasTileAt(tileMap, location)) return;
 
@@ -370,7 +374,7 @@ namespace UnityEngine.Tilemaps {
             var data = tiles[id];
             tileData.sprite = data.sprite;
             tileData.transform = data.transform;
-            tileData.color = Color.white;
+            tileData.color = baseColor;
             tileData.flags = TileFlags.LockAll;
             if (data.collider == ColliderType.Standard) tileData.colliderType = colliderType;
             else tileData.colliderType = (Tile.ColliderType)((int)data.collider - 1);
@@ -435,7 +439,8 @@ namespace UnityEngine.Tilemaps {
             while (len != curlen) {
                 if (len > curlen) {
                     tile.allowedTiles.Add(null);
-                } else {
+                }
+                else {
                     tile.allowedTiles.RemoveAt(curlen - 1);
                 }
                 curlen = tile.allowedTiles.Count;
@@ -469,12 +474,14 @@ namespace UnityEngine.Tilemaps {
                     while (len != curlen) {
                         if (len > curlen) {
                             t.variations.Add(new OmniTerrain.TileVariation());
-                        } else {
+                        }
+                        else {
                             t.variations.RemoveAt(curlen - 1);
                         }
                         curlen = t.variations.Count;
                     }
-                } else {
+                }
+                else {
                     // Zero length: erase list
                     t.variations = null;
                 }
@@ -485,14 +492,15 @@ namespace UnityEngine.Tilemaps {
                 float total = 0f;
                 for (int i = 0; i < len; i++) {
                     EditorGUILayout.LabelField(string.Format("        Alternative {0}", i + 1));
-                    t.variations[i].sprite = (Sprite)EditorGUILayout.ObjectField("            Sprite ", 
+                    t.variations[i].sprite = (Sprite)EditorGUILayout.ObjectField("            Sprite ",
                         t.variations[i].sprite, typeof(Sprite), false);
                     t.variations[i].chance = EditorGUILayout.FloatField("            Chance (%)", t.variations[i].chance);
                     total += t.variations[i].chance;
                 }
                 if (total <= 100f) {
                     EditorGUILayout.LabelField("        Default Tile Chance", string.Format("{0}%", 100 - total));
-                } else {
+                }
+                else {
                     EditorGUILayout.LabelField(string.Format("Total chance must be lower than 100%! (current: {0}%)", total));
                 }
             }
@@ -506,6 +514,7 @@ namespace UnityEngine.Tilemaps {
 
             // Global properties
             tile.colliderType = (Tile.ColliderType)EditorGUILayout.EnumPopup("Collider Type", tile.colliderType);
+            tile.baseColor = EditorGUILayout.ColorField("Base Color", tile.baseColor);
 
             // Allowed tiles
             GUIAllowedTiles();
