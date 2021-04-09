@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+using System;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -51,3 +52,4 @@ public class SceneInspectorSelector
         return path.Replace("Assets/Scenes/", "");
     }
 }
+#endif
