@@ -1,24 +1,24 @@
 using UnityEngine;
 using System.Collections;
 
-public static class AGeometry {
+public static class VectorExtensions {
     // Gets the angle from deltas
-    public static float DeltaToAngle(Vector2 delta) {
-        return Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg;
+    public static float DeltaToAngle(this Vector2 vec) {
+        return Mathf.Atan2(vec.y, vec.x) * Mathf.Rad2Deg;
     }
 
     // Gets the angle between two points in space
-    public static float AngleBetweenPoints(Vector2 p1, Vector2 p2) {
-		return Mathf.Atan2(p2.y-p1.y, p2.x-p1.x) * Mathf.Rad2Deg;
+    public static float AngleBetweenPoints(this Vector2 vec, Vector2 other) {
+		return Mathf.Atan2(other.y-vec.y, other.x-vec.x) * Mathf.Rad2Deg;
 	}
 
 	// Transforms a angular coordinate (angle, magnitute) into a cartesian (X, Y) coord
-	public static Vector2 AngularToCartesian(float ang) {
-        float rad = ang * Mathf.Deg2Rad;
-        return new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
+	public static Vector2 AngularToCartesian(this Vector2 polar) {
+        float rad = polar.x * Mathf.Deg2Rad;
+        return new Vector2(Mathf.Cos(rad), Mathf.Sin(rad)) * polar.y;
 	}
 
-    public static float DistanceToSegment(Vector2 pt, Vector2 p1, Vector2 p2, out Vector2 closest) {
+    public static float DistanceToSegment(this Vector2 pt, Vector2 p1, Vector2 p2, out Vector2 closest) {
         float dx = p2.x - p1.x;
         float dy = p2.y - p1.y;
 
@@ -51,7 +51,7 @@ public static class AGeometry {
         return Mathf.Sqrt(dx * dx + dy * dy);
     }
 
-    public static float DistanceToSegment(Vector2 pt, Vector2 p1, Vector2 p2) {
+    public static float DistanceToSegment(this Vector2 pt, Vector2 p1, Vector2 p2) {
         float dx = p2.x - p1.x;
         float dy = p2.y - p1.y;
 
@@ -78,5 +78,16 @@ public static class AGeometry {
         }
 
         return Mathf.Sqrt(dx * dx + dy * dy);
+    }
+
+    public static Vector2 Rotate(this Vector2 v, float degrees) {
+        float sin = Mathf.Sin(degrees * Mathf.Deg2Rad);
+        float cos = Mathf.Cos(degrees * Mathf.Deg2Rad);
+
+        float tx = v.x;
+        float ty = v.y;
+        v.x = (cos * tx) - (sin * ty);
+        v.y = (sin * tx) + (cos * ty);
+        return v;
     }
 }
