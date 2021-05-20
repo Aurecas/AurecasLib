@@ -7,10 +7,22 @@ using UnityEngine;
 
 public class SaveSystem
 {
-    
+    public static bool logFilePath;
     public static void SaveGame<T>(T data) {
         BinaryFormatter bf = new BinaryFormatter();
-        if (Debug.isDebugBuild) {
+        SurrogateSelector surrogateSelector = new SurrogateSelector();
+
+        //Vector3 surrogate
+        Vector3SerializationSurrogate vector3SS = new Vector3SerializationSurrogate();
+        surrogateSelector.AddSurrogate(typeof(Vector3), new StreamingContext(StreamingContextStates.All), vector3SS);
+
+        //Vector2 surrogate
+        Vector2SerializationSurrogate vector2SS = new Vector2SerializationSurrogate();
+        surrogateSelector.AddSurrogate(typeof(Vector2), new StreamingContext(StreamingContextStates.All), vector2SS);
+
+        bf.SurrogateSelector = surrogateSelector;
+
+        if (Debug.isDebugBuild && logFilePath) {
             Debug.Log("Save path: " + Application.persistentDataPath);
         }
         FileStream file = File.Open(Application.persistentDataPath + "/save.dat", FileMode.OpenOrCreate);

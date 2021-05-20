@@ -26,9 +26,9 @@ public class Pop : MonoBehaviour
     void Update()
     {
         text.text = data;
-        rect.offsetMax += (targetMax - rect.offsetMax) / 5f * Time.deltaTime * 60f;
-        rect.offsetMin += ((targetMax - new Vector2(500, targetHeight)) - rect.offsetMin) / 5f * Time.deltaTime * 60f;
-        alpha -= Time.deltaTime;
+        rect.offsetMax += (targetMax - rect.offsetMax) / 5f * Time.unscaledDeltaTime * 60f;
+        rect.offsetMin += ((targetMax - new Vector2(500, targetHeight)) - rect.offsetMin) / 5f * Time.unscaledDeltaTime * 60f;
+        alpha -= Time.unscaledDeltaTime;
         text.color = new Color(color.r, color.g, color.b, alpha); ;
     }
 }
