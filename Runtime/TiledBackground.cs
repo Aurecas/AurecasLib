@@ -6,6 +6,7 @@ public class TiledBackground : MonoBehaviour {
     // Parameters
     public string sortingLayer;
     public int sortingOrder;
+    public UpdateType updateType;
 
     // Components
     Camera myCam;
@@ -17,7 +18,31 @@ public class TiledBackground : MonoBehaviour {
     Vector2 imageScale;
     float lastCameraZoom;
 
-	void LateUpdate() {
+    public enum UpdateType {
+        Update,
+        LateUpdate,
+        FixedUpdate
+    }
+
+    private void FixedUpdate() {
+        if(updateType == UpdateType.FixedUpdate) {
+            Refresh();
+        }
+    }
+
+    void LateUpdate() {
+        if (updateType == UpdateType.LateUpdate) {
+            Refresh();
+        }
+    }
+
+    private void Update() {
+        if (updateType == UpdateType.Update) {
+            Refresh();
+        }
+    }
+
+    public void Refresh() {
         // Recalculate if camera zoom chances
         float size = myCam.orthographicSize;
         if (size != lastCameraZoom) {
