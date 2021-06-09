@@ -36,7 +36,7 @@ public class ButtonHitZone : MonoBehaviour {
 
         // create transparent graphic
         gobj.AddComponent<EmptyGraphic>();
-        gobj.AddComponent<CanvasRenderer>();
+        //gobj.AddComponent<CanvasRenderer>(); //2020 only
 
         // delegate events
         EventTrigger eventTrigger = gobj.AddComponent<EventTrigger>();
