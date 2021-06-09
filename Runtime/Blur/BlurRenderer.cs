@@ -35,7 +35,17 @@ namespace AurecasLib {
 
         public Material GetBlur(ShaderParams param) {
             // Create texture
-            RenderTexture tex = new RenderTexture(1024 >> param.downRes, 512 >> param.downRes, 16, RenderTextureFormat.ARGB32);
+			int w = 512;
+			int h = 512;
+            if(myCamera.aspect < 1) {
+                w = 512;
+                h = 1024;
+            }
+            else if(myCamera.aspect > 1) {
+                w = 1024;
+                h = 5012;
+            }
+            RenderTexture tex = new RenderTexture(w >> param.downRes, h >> param.downRes, 16, RenderTextureFormat.ARGB32);
             tex.Create();
 
             // Render
