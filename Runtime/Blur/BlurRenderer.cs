@@ -45,7 +45,7 @@ namespace AurecasLib {
                 w = 1024;
                 h = 5012;
             }
-            RenderTexture tex = new RenderTexture(w >> param.downRes, h >> param.downRes, 16, RenderTextureFormat.ARGB32);
+            RenderTexture tex = new RenderTexture(w >> param.downRes, h >> param.downRes, 24, RenderTextureFormat.ARGB32);
             tex.Create();
 
             // Render
@@ -63,7 +63,7 @@ namespace AurecasLib {
 
         public Material GetBlurFromTexture(Texture source, ShaderParams param) {
             // Create texture
-            RenderTexture tex = new RenderTexture(1024 >> param.downRes, 512 >> param.downRes, 16, RenderTextureFormat.ARGB32);
+            RenderTexture tex = new RenderTexture(1024 >> param.downRes, 512 >> param.downRes, 24, RenderTextureFormat.ARGB32);
             tex.Create();
 
             // Render
@@ -90,17 +90,17 @@ namespace AurecasLib {
 
         void RenderFromScreen(RenderTexture target, ShaderParams param) {
             // Render the camera to a texture of the same size as the screen (canvases should remain the same size)
-            RenderTexture screen = RenderTexture.GetTemporary(Screen.width, Screen.height, 16);
+            RenderTexture screen = RenderTexture.GetTemporary(Screen.width, Screen.height, 24);
             myCamera.targetTexture = screen;
             myCamera.Render();
             myCamera.targetTexture = null;
 
             // Define texture width and height
-            int width = 1024 >> param.downRes; //Screen.width >> shaderDownRes;
+            int width = target.width >> param.downRes; //Screen.width >> shaderDownRes;
             int height = (int)(width / (float)Screen.width * Screen.height); //Screen.height >> shaderDownRes;
 
             // Copy screen texture to temp texture
-            RenderTexture rt = RenderTexture.GetTemporary(Screen.width, Screen.height, 16);
+            RenderTexture rt = RenderTexture.GetTemporary(Screen.width, Screen.height, 24);
             Graphics.Blit(screen, rt);
             RenderTexture.ReleaseTemporary(screen);
 
@@ -120,12 +120,20 @@ namespace AurecasLib {
         }
 
         void RenderFromTexture(Texture source, RenderTexture target, ShaderParams param) {
+
+            if(source == null) {
+                source = RenderTexture.GetTemporary(Screen.width, Screen.height, 24);
+                myCamera.targetTexture = source as RenderTexture;
+                myCamera.Render();
+                myCamera.targetTexture = null;
+            }
+
             // Set the width and height
-            int width = 1024 >> param.downRes;
+            int width = source.width >> param.downRes;
             int height = (int)(width / (float)source.width * source.height);
 
             // Create a temp texture
-            RenderTexture rt = RenderTexture.GetTemporary(width, height, 16);
+            RenderTexture rt = RenderTexture.GetTemporary(width, height, 24);
 
             // Move the provided texture to our temp render texture
             Graphics.Blit(source, rt);
