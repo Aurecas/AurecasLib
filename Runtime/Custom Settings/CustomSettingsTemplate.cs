@@ -32,10 +32,10 @@ public class CustomSettingsTemplate : CustomSettingsObject {
 
     //Descomente isso pra que a aba apareça no Project Settings (não esqueça de trocar o tipo de "CustomSettingsTemplate" para o nome da sua classe)
 
-#if UNITY_EDITOR
-    [SettingsProvider]
-    public static SettingsProvider CreateCustomSettingsProvider() {
-        return CustomSettingsIMGUIRegister.CreateCustomSettingsProvider(typeof(CustomSettingsTemplate));
-    }
-#endif
+//#if UNITY_EDITOR
+//    [SettingsProvider]
+//    public static SettingsProvider CreateCustomSettingsProvider() {
+//        return CustomSettingsIMGUIRegister.CreateCustomSettingsProvider(typeof(CustomSettingsTemplate));
+//    }
+//#endif
 }
