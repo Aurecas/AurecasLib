@@ -33,6 +33,7 @@ public class Transition : MonoBehaviour {
         // Load requested scene
         ST.loadingScene = SceneManager.LoadSceneAsync(scene);
         ST.loadingScene.allowSceneActivation = false;
+        TransitionManager.Instance.PrepareSceneIntro(scene);
 
         // Fade out
         ST.myAnimator.Play("Out");
@@ -75,7 +76,8 @@ public class Transition : MonoBehaviour {
         if (sameScene) {
             sameSceneCallback?.Invoke();
             if (sameSceneAutoIn) StartCoroutine(FadeInSkipFrame());
-        } else {
+        }
+        else {
             loadingScene.allowSceneActivation = true;
         }
     }
@@ -91,7 +93,7 @@ public class Transition : MonoBehaviour {
 
     void Start() {
         if (autoFadeIn) {
-            StartCoroutine(FadeInSkipFrame());
+            myAnimator.Play("In");
         }
     }
 
