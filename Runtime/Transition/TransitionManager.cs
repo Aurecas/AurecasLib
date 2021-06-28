@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class TransitionManager : MonoBehaviour {
     public static TransitionManager Instance;
-
     private string sceneToPrepare;
 
     private void Awake() {
@@ -31,7 +30,12 @@ public class TransitionManager : MonoBehaviour {
         if (sceneToPrepare.Length == 0) return;
 
         if (scene.name == sceneToPrepare) {
-            Instantiate(GlobalReferences.transitionPrefab);
+            if(Transition.overrideTransitionPrefab == null)
+                Instantiate(Transition.defaultTransitionPrefab);
+            else
+                Instantiate(Transition.overrideTransitionPrefab);
+
+            Transition.overrideTransitionPrefab = null;
             sceneToPrepare = "";
         }
     }

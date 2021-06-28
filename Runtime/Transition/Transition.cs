@@ -4,7 +4,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Transition : MonoBehaviour {
+
+    public static Transition defaultTransitionPrefab;
     public static Transition ST;
+    public static Transition overrideTransitionPrefab;
 
     // Parameters
     public bool autoFadeIn = true;
@@ -20,12 +23,19 @@ public class Transition : MonoBehaviour {
     // Delegates
     public delegate void TransitionCallback();
 
-    public static void Goto(string scene) {
+    public static void Goto(string scene, Transition transitionPrefab = null) {
+        if(defaultTransitionPrefab == null) {
+            Debug.LogWarning("No default transition set, use Transition.defaultTransitionPrefab to set a default transition");
+        }
+        overrideTransitionPrefab = transitionPrefab;
+
         // Create if isn't instantiated already
         if (ST == null) {
-            ST = Instantiate(GlobalReferences.transitionPrefab);
+            if(overrideTransitionPrefab == null)
+                ST = Instantiate(defaultTransitionPrefab);
+            else
+                ST = Instantiate(overrideTransitionPrefab);
         }
-
         // Disable auto fade in for this instance
         ST.autoFadeIn = false;
         ST.sameScene = false;
@@ -42,7 +52,7 @@ public class Transition : MonoBehaviour {
     public static void SameSceneTransition(TransitionCallback callback = null, bool autoIn = true) {
         // Create if isn't instantiated already
         if (ST == null) {
-            ST = Instantiate(GlobalReferences.transitionPrefab);
+            ST = Instantiate(defaultTransitionPrefab);
         }
 
         // Disable auto fade in for this instance
@@ -93,7 +103,7 @@ public class Transition : MonoBehaviour {
 
     void Start() {
         if (autoFadeIn) {
-            myAnimator.Play("In");
+            myAnimator.Play("In", 0, 0);
         }
     }
 
