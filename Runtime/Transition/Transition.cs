@@ -98,6 +98,10 @@ public class Transition : MonoBehaviour {
     }
 
     void Awake() {
+        if(ST != null && ST != this) {
+            Destroy(ST.gameObject);
+        }
+
         ST = this;
 
         // Components
