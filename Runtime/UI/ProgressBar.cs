@@ -10,9 +10,16 @@ public class ProgressBar : MonoBehaviour
     public float value;
     public float maxValue = 100;
 
+    public FillMode fillMode;
+
     public bool vertical = false;
     public Text textValue;
     public string textFormat;
+
+    public enum FillMode {
+        Fill,
+        Stretch
+    }
 
     public void SetValue(float value, float maxValue)
     {
@@ -21,18 +28,31 @@ public class ProgressBar : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
         float v = value / maxValue;
 
-        RectTransform rectTransform = GetComponent<RectTransform>();
-        if (!vertical)
-            fillBar.rectTransform.offsetMax = new Vector2((v - 1) * rectTransform.rect.width, fillBar.rectTransform.offsetMax.y);
-        else
-            fillBar.rectTransform.offsetMax = new Vector2(fillBar.rectTransform.offsetMax.x, (v - 1) * rectTransform.rect.height);
+        switch (fillMode) {
+            case FillMode.Stretch:
+                fillBar.type = Image.Type.Simple;
+                RectTransform rectTransform = GetComponent<RectTransform>();
+                if (!vertical)
+                    fillBar.rectTransform.offsetMax = new Vector2((v - 1) * rectTransform.rect.width, fillBar.rectTransform.offsetMax.y);
+                else
+                    fillBar.rectTransform.offsetMax = new Vector2(fillBar.rectTransform.offsetMax.x, (v - 1) * rectTransform.rect.height);
+                break;
+            case FillMode.Fill:
+                fillBar.type = Image.Type.Filled;
+                fillBar.fillMethod = vertical ? Image.FillMethod.Vertical : Image.FillMethod.Horizontal;
+                fillBar.fillAmount = v;
+                if (!vertical)
+                    fillBar.rectTransform.offsetMax = new Vector2(0, fillBar.rectTransform.offsetMax.y);
+                else
+                    fillBar.rectTransform.offsetMax = new Vector2(fillBar.rectTransform.offsetMax.x, 0);
+                
+                break;
+        }
 
-        if(textValue != null)
-        {
+        if (textValue != null) {
             textValue.text = string.Format(textFormat, value, maxValue);
         }
     }
