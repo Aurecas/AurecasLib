@@ -11,6 +11,7 @@ public class ProgressBar : MonoBehaviour
     public float maxValue = 100;
 
     public FillMode fillMode;
+    public Image.Type fillingImageType;
 
     public bool vertical = false;
     public Text textValue;
@@ -33,7 +34,7 @@ public class ProgressBar : MonoBehaviour
 
         switch (fillMode) {
             case FillMode.Stretch:
-                fillBar.type = Image.Type.Simple;
+                fillBar.type = fillingImageType;
                 RectTransform rectTransform = GetComponent<RectTransform>();
                 if (!vertical)
                     fillBar.rectTransform.offsetMax = new Vector2((v - 1) * rectTransform.rect.width, fillBar.rectTransform.offsetMax.y);
