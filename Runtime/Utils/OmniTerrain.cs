@@ -1,12 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
-namespace UnityEngine.Tilemaps {
+namespace AurecasLib.Utils {
     [System.Serializable]
     [CreateAssetMenu(fileName = "AutoTile", menuName = "Tiles/AutoTile Omni")]
     public class OmniTerrain : TileBase {
@@ -396,7 +396,7 @@ namespace UnityEngine.Tilemaps {
 
 #if UNITY_EDITOR
     [CustomEditor(typeof(OmniTerrain))]
-    public class OmniTerrainEditor : Editor {
+    public class OmniTerrainEditor : UnityEditor.Editor {
         OmniTerrain tile { get { return (target as OmniTerrain); } }
         GUIStyle styleHeaderLabel;
         bool tilesetExpanded = true;

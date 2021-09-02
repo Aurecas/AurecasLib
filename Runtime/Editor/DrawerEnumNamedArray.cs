@@ -1,19 +1,21 @@
 ﻿#if UNITY_EDITOR
-using UnityEngine;
+using AurecasLib.Utils;
 using UnityEditor;
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine;
 
-[CustomPropertyDrawer(typeof(EnumNamedArrayAttribute))]
-public class DrawerEnumNamedArray : PropertyDrawer {
-    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
-        EnumNamedArrayAttribute enumNames = attribute as EnumNamedArrayAttribute;
+namespace AurecasLib.Editor {
 
-        int index = System.Convert.ToInt32(property.propertyPath.Substring(property.propertyPath.IndexOf("["))
-            .Replace("[", "").Replace("]", ""));
+    [CustomPropertyDrawer(typeof(EnumNamedArrayAttribute))]
+    public class DrawerEnumNamedArray : PropertyDrawer {
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
+            EnumNamedArrayAttribute enumNames = attribute as EnumNamedArrayAttribute;
 
-        label.text = enumNames.names[index];
-        EditorGUI.PropertyField(position, property, label, true);
+            int index = System.Convert.ToInt32(property.propertyPath.Substring(property.propertyPath.IndexOf("["))
+                .Replace("[", "").Replace("]", ""));
+
+            label.text = enumNames.names[index];
+            EditorGUI.PropertyField(position, property, label, true);
+        }
     }
 }
 #endif
