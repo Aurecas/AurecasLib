@@ -26,24 +26,24 @@ namespace AurecasLib.Logs {
             pops = new List<Pop>();
         }
 
-        public static void Log(object data) {
+        public static void Log(object data, bool forceOnProd = false) {
             if (Instance) {
-                Instance._Log(data);
+                Instance._Log(data, forceOnProd);
             }
         }
 
-        public static void Log(object data, Color color) {
+        public static void Log(object data, Color color, bool forceOnProd = false) {
             if (Instance) {
-                Instance._Log(data, color);
+                Instance._Log(data, color, forceOnProd);
             }
         }
 
-        private void _Log(object data) {
-            _Log(data, Color.white);
+        private void _Log(object data, bool forceOnProd = false) {
+            _Log(data, Color.white, forceOnProd);
         }
 
-        private void _Log(object data, Color color) {
-            if (Debug.isDebugBuild) {
+        private void _Log(object data, Color color, bool forceOnProd = false) {
+            if (Debug.isDebugBuild || forceOnProd) {
                 GameObject pop = Instantiate(popPrefab, transform);
                 Pop p = pop.GetComponent<Pop>();
                 p.data = data.ToString();
