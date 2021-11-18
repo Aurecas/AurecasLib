@@ -50,7 +50,7 @@ namespace AurecasLib.Utils {
         }
 
         static int GetMouseTouches() {
-            if (Input.GetMouseButton(0)) return 1;
+            if (Input.GetMouseButton(0) || Input.GetMouseButtonUp(0)) return 1;
             return 0;
         }
 
