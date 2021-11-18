@@ -15,9 +15,10 @@ namespace AurecasLib.Utils {
                         deltaPosition = Input.mousePosition - lastMousePos,
                         phase = TouchPhase.Began,
                     };
+                    lastMousePos = Input.mousePosition;
                     return touch;
                 }
-                else if (Input.GetMouseButtonUp(0)) {
+                if (Input.GetMouseButtonUp(0)) {
                     Touch touch = new Touch() {
                         deltaTime = Time.deltaTime,
                         fingerId = 0,
@@ -25,9 +26,10 @@ namespace AurecasLib.Utils {
                         deltaPosition = Input.mousePosition - lastMousePos,
                         phase = TouchPhase.Ended,
                     };
+                    lastMousePos = Input.mousePosition;
                     return touch;
                 }
-                else if (Input.GetMouseButton(0)) {
+                if (Input.GetMouseButton(0)) {
                     Touch touch = new Touch() {
                         deltaTime = Time.deltaTime,
                         fingerId = 0,
@@ -35,11 +37,11 @@ namespace AurecasLib.Utils {
                         deltaPosition = Input.mousePosition - lastMousePos,
                         phase = Input.mousePosition == lastMousePos ? TouchPhase.Stationary : TouchPhase.Moved,
                     };
+                    lastMousePos = Input.mousePosition;
                     return touch;
                 }
-                else {
-                    return Input.GetTouch(index);
-                }
+
+                 return Input.GetTouch(index);
             }
             else {
                 return Input.GetTouch(index - GetMouseTouches());
