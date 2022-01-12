@@ -37,11 +37,11 @@ namespace AurecasLib.Saving {
             return currency;
         }
 
-        public void AddToDefaultCurrency(int coins) {
+        public virtual void AddToDefaultCurrency(int coins) {
             currency += coins;
         }
 
-        public bool SpendDefaultCurrency(int amount) {
+        public virtual bool SpendDefaultCurrency(int amount) {
             if(currency >= amount) {
                 currency -= amount;
                 return true;
@@ -80,7 +80,7 @@ namespace AurecasLib.Saving {
             return count;
         }
 
-        public void AddItemToInventory(string itemId, int amount) {
+        public virtual void AddItemToInventory(string itemId, int amount) {
             inventory.Add(new InventoryItem() {
                 itemId = itemId,
                 amount = amount
@@ -88,13 +88,23 @@ namespace AurecasLib.Saving {
             RevalidateInventory();
         }
 
-        public int GetItemAmount(string itemId) {
+        public virtual void ConsumeItemInInventory(string itemId) {
+            foreach (InventoryItem item in inventory) {
+                if (item.itemId == itemId) {
+                    if(item.amount > 0)
+                        item.amount--;
+                }
+            }
+            RevalidateInventory();
+        }
+
+        public virtual int GetItemAmount(string itemId) {
             InventoryItem item = SearchItem(itemId);
             if (item != null) return item.amount;
             else return 0;
         }
 
-        public InventoryItem SearchItem(string itemId) {
+        public virtual InventoryItem SearchItem(string itemId) {
             RevalidateInventory();
             foreach(InventoryItem item in inventory) {
                 if (item.itemId == itemId) return item;
@@ -135,7 +145,7 @@ namespace AurecasLib.Saving {
             }
         }
 
-        public void SetLevelData(int world, int level, LevelData levelData) {
+        public virtual void SetLevelData(int world, int level, LevelData levelData) {
             Initialize();
             while (world >= levels.GetWorldCount()) {
                 levels.AddWorld();
