@@ -208,7 +208,7 @@ namespace AurecasLib.Saving {
             }
         }
 
-        public void GetLastUnlockedLevel(out int world, out int level) {
+        public bool GetLastUnlockedLevel(out int world, out int level) {
             Initialize();
             int worldCount = levels.GetWorldCount();
             for (int i = worldCount - 1; i >= 0; i--) {
@@ -218,12 +218,13 @@ namespace AurecasLib.Saving {
                     if (ld.unlocked && !ld.finished) {
                         world = i;
                         level = j;
-                        return;
+                        return true;
                     }
                 }
             }
             world = 0;
             level = 0;
+            return false;
         }
 
         public void GetNextWorldAndLevel(int world, int level, out int nworld, out int nlevel) {
