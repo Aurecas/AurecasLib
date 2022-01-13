@@ -32,6 +32,7 @@ namespace AurecasLib.Saving {
         [JsonConverter(typeof(LevelDataConverter))]
         public ComposedLevelDataList levels;
         public List<InventoryItem> inventory;
+        bool dirty = false;
 
         public int GetDefaultCurrencyAmount() {
             return currency;
@@ -81,6 +82,13 @@ namespace AurecasLib.Saving {
         }
 
         public virtual void AddItemToInventory(string itemId, int amount) {
+            for(int i = 0; i < inventory.Count; i++) {
+                if(inventory[i].itemId == itemId) {
+                    inventory[i].amount += amount;
+                    return;
+                }
+            }
+
             inventory.Add(new InventoryItem() {
                 itemId = itemId,
                 amount = amount
@@ -89,10 +97,14 @@ namespace AurecasLib.Saving {
         }
 
         public virtual void ConsumeItemInInventory(string itemId) {
-            foreach (InventoryItem item in inventory) {
+            for (int i = 0; i < inventory.Count; i++) {
+                InventoryItem item = inventory[i];
                 if (item.itemId == itemId) {
-                    if(item.amount > 0)
+                    if (item.amount > 0) {
                         item.amount--;
+                        SetDirty();
+                        break;
+                    }
                 }
             }
             RevalidateInventory();
@@ -112,12 +124,17 @@ namespace AurecasLib.Saving {
             return null;
         }
 
+        public void SetDirty() {
+            dirty = true;
+        }
+
         private void RevalidateInventory() {
+            if (!dirty) return;
             //Faz um merge em todos os items de ID igual;
             Dictionary<string, int> revalidatedInventory = new Dictionary<string, int>();
             foreach(InventoryItem item in inventory) {
                 if (!revalidatedInventory.ContainsKey(item.itemId)) {
-                    revalidatedInventory.Add(item.itemId, item.amount);
+                    revalidatedInventory.Add(item.itemId, 0);
                 }
                 revalidatedInventory[item.itemId] += item.amount;
             }
@@ -132,6 +149,7 @@ namespace AurecasLib.Saving {
                     });
                 }
             }
+            dirty = false;
         }
 
         public void Initialize() {
