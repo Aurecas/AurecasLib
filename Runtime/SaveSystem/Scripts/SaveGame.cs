@@ -64,8 +64,9 @@ namespace AurecasLib.Saving {
             else {
                 return false;
             }
-
         }
+
+
 
         public int GetTotalStarsCollected() {
             int count = 0;
@@ -199,6 +200,15 @@ namespace AurecasLib.Saving {
             }
             if (levels.GetLevel(world, level).ranking == null) levels.GetLevel(world, level).ranking = new bool[3];
             return levels.GetLevel(world, level);
+        }
+
+        public void RegisterLevelData(int world, int level) {
+            while(world >= levels.GetWorldCount()) { //Se não tem esse mundo, cria
+                levels.AddWorld();
+            }
+            while(level >= levels.GetLevels(world).Count) { //Se não tem esse level, cria
+                levels.AddLevel(world, new LevelData());
+            }
         }
 
         public void GetNextWorldAndLevel(out int world, out int level) {
