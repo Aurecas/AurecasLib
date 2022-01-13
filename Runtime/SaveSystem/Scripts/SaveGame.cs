@@ -65,9 +65,6 @@ namespace AurecasLib.Saving {
                 return false;
             }
         }
-
-
-
         public int GetTotalStarsCollected() {
             int count = 0;
             foreach (var l in levels.GetWorlds()) {
@@ -211,7 +208,7 @@ namespace AurecasLib.Saving {
             }
         }
 
-        public void GetNextWorldAndLevel(out int world, out int level) {
+        public void GetLastUnlockedLevel(out int world, out int level) {
             Initialize();
             int worldCount = levels.GetWorldCount();
             for (int i = worldCount - 1; i >= 0; i--) {
@@ -227,6 +224,33 @@ namespace AurecasLib.Saving {
             }
             world = 0;
             level = 0;
+        }
+
+        public void GetNextWorldAndLevel(int world, int level, out int nworld, out int nlevel) {
+            int nw = world;
+            int nl = level + 1;
+
+            if (nl >= levels.GetLevels(nw).Count) {
+                nw++;
+                nl = 0;
+            }
+            nworld = nw;
+            nlevel = nl;
+        }
+
+        public void UnlockNextLevel(int world, int level) {
+
+            GetNextWorldAndLevel(world, level, out int nw, out int nl);
+
+            if(nw < levels.GetWorldCount()) {
+                LevelData ld = GetLevelData(nw, nl);
+                ld.unlocked = true;
+                SetLevelData(nw, nl, ld);
+            }
+            else {
+                //Acabou
+            }
+
         }
 
         public override string ToString() {
