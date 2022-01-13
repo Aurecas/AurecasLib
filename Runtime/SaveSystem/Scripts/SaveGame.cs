@@ -19,6 +19,20 @@ namespace AurecasLib.Saving {
                 ranking = new bool[3];
                 customData = new Dictionary<string, string>();
             }
+
+            public void SetData(string key, string data) {
+                if (customData == null) customData = new Dictionary<string, string>();
+                if (!customData.ContainsKey(key)) {
+                    customData.Add(key, data);
+                }
+                else customData[key] = data;
+            }
+
+            public string GetData(string key, string dft = null) {
+                if (customData == null) customData = new Dictionary<string, string>();
+                if (customData.ContainsKey(key)) return customData[key];
+                return dft;
+            }
         }
 
         [Serializable]
