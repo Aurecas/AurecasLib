@@ -13,11 +13,11 @@ namespace AurecasLib.Saving {
             public bool unlocked;
             public bool finished;
             public bool[] ranking; //3 rankings por padrão
-            public List<object> customData;
+            public Dictionary<string, string> customData;
 
             public LevelData() {
                 ranking = new bool[3];
-                customData = new List<object>();
+                customData = new Dictionary<string, string>();
             }
         }
 
