@@ -69,6 +69,8 @@ namespace AurecasLib.UI {
             if (!snapToContent) {
                 if (currentDragPosition.x > 0) currentDragPosition.x = 0;
                 if (currentDragPosition.x < -(transform.childCount - 1) * sectionWidth) currentDragPosition.x = -(transform.childCount - 1) * sectionWidth;
+
+                index = Mathf.Clamp((int)(rect.anchoredPosition.x / (-(transform.childCount - 1) * sectionWidth)), 0, transform.childCount - 1);
             }
 
             if (dragMode || !snapToContent) {
