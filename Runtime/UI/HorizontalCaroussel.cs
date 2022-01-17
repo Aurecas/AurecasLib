@@ -70,7 +70,6 @@ namespace AurecasLib.UI {
                 if (currentDragPosition.x > 0) currentDragPosition.x = 0;
                 if (currentDragPosition.x < -(transform.childCount - 1) * sectionWidth) currentDragPosition.x = -(transform.childCount - 1) * sectionWidth;
 
-                index = Mathf.Clamp((int)(rect.anchoredPosition.x / (-(transform.childCount - 1) * sectionWidth)), 0, transform.childCount - 1);
             }
 
             if (dragMode || !snapToContent) {
@@ -128,7 +127,12 @@ namespace AurecasLib.UI {
         }
 
         public int GetSelectedValue() {
-            return index;
+            if(snapToContent)
+                return index;
+            else {
+                float nw = (sectionWidth * (transform.childCount - 1)) / transform.childCount;
+                return (-(int)(rect.anchoredPosition.x / nw));
+            }
         }
 
         public void BeginDragEvent(Vector2 position, Vector2 deltaPosition) {
