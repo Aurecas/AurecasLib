@@ -206,6 +206,17 @@ namespace AurecasLib.Saving {
             while(level >= levels.GetLevels(world).Count) { //Se não tem esse level, cria
                 levels.AddLevel(world, new LevelData());
             }
+
+        }
+
+        public void SetWorldLevelCount(int world, int levelCount) {
+            while (levelCount >= levels.GetLevels(world).Count) { //Se não tem esse level, cria
+                levels.AddLevel(world, new LevelData());
+            }
+            //se tem level demais, apaga
+            while (levels.GetLevels(world).Count > levelCount) {
+                levels.RemoveLevel(world, levels.GetLevels(world).Count - 1);
+            }
         }
 
         public bool GetLastUnlockedLevel(out int world, out int level) {

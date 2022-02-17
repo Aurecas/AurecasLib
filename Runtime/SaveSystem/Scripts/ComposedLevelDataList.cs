@@ -37,6 +37,10 @@ namespace AurecasLib.Saving {
             levels[world].list.Add(level);
         }
 
+        public void RemoveLevel(int world, int levelIndex) {
+            levels[world].list.RemoveAt(levelIndex);
+        }
+
         public void SetLevel(int world, int level, LevelData data) {
             levels[world].list[level] = data;
         }
