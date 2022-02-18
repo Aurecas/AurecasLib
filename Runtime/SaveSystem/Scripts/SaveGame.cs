@@ -238,16 +238,18 @@ namespace AurecasLib.Saving {
             return false;
         }
 
-        public void GetNextWorldAndLevel(int world, int level, out int nworld, out int nlevel) {
+        public bool GetNextWorldAndLevel(int world, int level, out int nworld, out int nlevel) {
             int nw = world;
             int nl = level + 1;
-
             if (nl >= levels.GetLevels(nw).Count) {
                 nw++;
                 nl = 0;
             }
+            
             nworld = nw;
             nlevel = nl;
+
+            return nw < levels.GetWorldCount();
         }
 
         public void UnlockNextLevel(int world, int level) {
