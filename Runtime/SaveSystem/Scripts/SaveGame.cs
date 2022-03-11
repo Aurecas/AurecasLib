@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace AurecasLib.Saving {
@@ -12,12 +13,26 @@ namespace AurecasLib.Saving {
         public class LevelData {
             public bool unlocked;
             public bool finished;
-            public bool[] ranking; //3 rankings por padrão
+            private bool[] ranking; //3 rankings por padrão
             public Dictionary<string, string> customData;
 
             public LevelData() {
                 ranking = new bool[3];
                 customData = new Dictionary<string, string>();
+            }
+
+            public void SetRanking(int index, bool value) {
+                if (ranking == null) ranking = new bool[3];
+                ranking[index] = value;
+            }
+
+            public bool GetRanking(int index) {
+                if (ranking == null) ranking = new bool[3];
+                return ranking[index];
+            }
+
+            public int GetRankingCount() {
+                return ranking.Where(b => b).Count();
             }
 
             public void SetData(string key, string data) {
@@ -69,8 +84,8 @@ namespace AurecasLib.Saving {
             int count = 0;
             foreach (var l in levels.GetWorlds()) {
                 foreach (LevelData ld in l.list) {
-                    for (int i = 0; i < ld.ranking.Length; i++) {
-                        if (ld.ranking[i]) {
+                    for (int i = 0; i < 3; i++) {
+                        if (ld.GetRanking(i)) {
                             count++;
                         }
                     }
@@ -84,8 +99,8 @@ namespace AurecasLib.Saving {
             int count = 0;
 
             foreach (LevelData ld in levels.GetWorlds()[world].list) {
-                for (int i = 0; i < ld.ranking.Length; i++) {
-                    if (ld.ranking[i]) {
+                for (int i = 0; i < 3; i++) {
+                    if (ld.GetRanking(i)) {
                         count++;
                     }
                 }
@@ -195,7 +210,6 @@ namespace AurecasLib.Saving {
             if (world == 0 && level == 0) {
                 levels.GetLevel(world, level).unlocked = true;
             }
-            if (levels.GetLevel(world, level).ranking == null) levels.GetLevel(world, level).ranking = new bool[3];
             return levels.GetLevel(world, level);
         }
 
