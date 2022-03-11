@@ -6,5 +6,8 @@
     "unity": "2019.4",
     "keywords": [],
     "description": "Biblioteca de códigos genéricos da Aurecas",
-    "samples": []
+    "samples": [],
+	"dependencies": {
+		"com.unity.nuget.newtonsoft-json": "2.0.0"
+	}
 }
