@@ -29,7 +29,7 @@ namespace AurecasLib.UI {
 
         // Update is called once per frame
         void Update() {
-            float v = value / maxValue;
+            float v = Mathf.Clamp(value, 0, maxValue) / maxValue;
 
             switch (fillMode) {
                 case FillMode.Stretch:
