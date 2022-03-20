@@ -13,7 +13,12 @@ namespace AurecasLib.Settings {
         public static T GetDefaultSettings<T>() where T : CustomSettingsObject {
             if (!DefaultSettings.ContainsKey(typeof(T))) {
                 CustomSettingsAttribute attr = typeof(T).GetCustomAttribute(typeof(CustomSettingsAttribute)) as CustomSettingsAttribute;
-                DefaultSettings.Add(typeof(T), Resources.Load(attr.defaultPath, typeof(T)) as T);
+                try {
+                    DefaultSettings.Add(typeof(T), Resources.Load(attr.defaultPath, typeof(T)) as T);
+                }
+                catch (Exception e){
+                    Debug.Log("Deu alguma merda na hora de registrar o Custom Settings " + typeof(T).Name + "\n" + e.Message + "\nContinuando como se nada tivesse acontecido...");
+                }
             }
             return DefaultSettings[typeof(T)] as T;
         }
