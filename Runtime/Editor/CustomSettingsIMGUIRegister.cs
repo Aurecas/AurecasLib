@@ -92,7 +92,7 @@ namespace AurecasLib.Editor {
                     if (!field.isMethod) {
                         SerializedProperty serProp = settings.FindProperty(field.name);
                         if (serProp != null)
-                            EditorGUILayout.PropertyField(serProp);
+                            EditorGUILayout.PropertyField(serProp, true);
                     }
                     else {
                         if (GUILayout.Button(field.name)) {
